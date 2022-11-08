@@ -58,24 +58,22 @@ public class MainActivity extends AppCompatActivity {
 //            dao.add(user);
 //        });
 
-//        Log.d(TAG, "onCreate() called");
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//
-//        songService = new SongService(getApplicationContext());
-//        songView = (TextView) findViewById(R.id.song);
-//        addBtn = (Button) findViewById(R.id.add);
-//        songFragmentDisplay = (FrameLayout) findViewById(R.id.songFragmentFrame);
-//
-//        SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
-//
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        ft.replace(songFragmentDisplay.getId(), new SongDisplay());
-//        ft.commit();
-//
-//        getTracks();
-//
-//        addBtn.setOnClickListener(addListener);
+        Log.d(TAG, "onCreate() called");
+
+        songService = new SongService(getApplicationContext());
+        songView = (TextView) findViewById(R.id.song);
+        addBtn = (Button) findViewById(R.id.add);
+        songFragmentDisplay = (FrameLayout) findViewById(R.id.songFragmentFrame);
+
+        SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(songFragmentDisplay.getId(), new SongDisplay());
+        ft.commit();
+
+        getTracks();
+
+        addBtn.setOnClickListener(addListener);
     }
 
     private View.OnClickListener addListener = v -> {

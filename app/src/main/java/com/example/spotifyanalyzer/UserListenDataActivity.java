@@ -31,7 +31,7 @@ public class UserListenDataActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_song_display);
+        setContentView(R.layout.temp_frag_song_display);
 //        final EditText edit_name = findViewById(R.id.edit_name);
 //        final EditText edit_password = findViewById(R.id.edit_password);
 //        Button btn = findViewById(R.id.add_button);
