@@ -3,6 +3,7 @@ package com.example.spotifyanalyzer;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -53,7 +54,7 @@ public class SongService {
                     }
                     callBack.onSuccess();
                 }, error -> {
-                    // TODO: Handle error
+                    Log.v("Song ERROR", "Error retrieving song list");
 
                 }) {
             @Override

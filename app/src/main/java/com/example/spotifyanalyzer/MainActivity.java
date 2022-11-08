@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,24 +37,45 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate() called");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        final EditText edit_name = findViewById(R.id.edit_name);
+//        final EditText edit_password = findViewById(R.id.edit_password);
+//        Button btn = findViewById(R.id.add_button);
 
-        songService = new SongService(getApplicationContext());
-        songView = (TextView) findViewById(R.id.song);
-        addBtn = (Button) findViewById(R.id.add);
-        songFragmentDisplay = (FrameLayout) findViewById(R.id.songFragmentFrame);
+        Button newBtn = findViewById(R.id.newList);
+        Button loadBtn = findViewById(R.id.loadLists);
 
-        SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
 
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(songFragmentDisplay.getId(), new SongDisplay());
-        ft.commit();
 
-        getTracks();
+        newBtn.setOnClickListener(v ->{
+            Intent newListData = new Intent(this, UserListenDataActivity.class);
+            startActivity(newListData);
+        });
+//        newBtn.setOnClickListener(v ->{
+//            UserCrud user = new UserCrud(edit_name.getText().toString(), edit_password.getText().toString());
+//            dao.add(user);
+//        });
 
-        addBtn.setOnClickListener(addListener);
+//        Log.d(TAG, "onCreate() called");
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_main);
+//
+//        songService = new SongService(getApplicationContext());
+//        songView = (TextView) findViewById(R.id.song);
+//        addBtn = (Button) findViewById(R.id.add);
+//        songFragmentDisplay = (FrameLayout) findViewById(R.id.songFragmentFrame);
+//
+//        SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
+//
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//        ft.replace(songFragmentDisplay.getId(), new SongDisplay());
+//        ft.commit();
+//
+//        getTracks();
+//
+//        addBtn.setOnClickListener(addListener);
     }
 
     private View.OnClickListener addListener = v -> {
