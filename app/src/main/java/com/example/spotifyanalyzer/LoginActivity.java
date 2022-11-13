@@ -8,10 +8,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
+import android.widget.Button;
 
 import com.android.volley.*;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.spotify.sdk.android.auth.*;
+
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -19,10 +23,12 @@ public class LoginActivity extends AppCompatActivity {
     private static final String CLIENT_ID = "8ab9226475db4ffca0159c755076590f";
     private static final String REDIRECT_URI = "com.example.spotifytestv4://callback";
     private static final int REQUEST_CODE = 1337;
-    private static final String SCOPES = "user-read-recently-played,user-library-modify,user-read-email,user-read-private";
+    private static final String SCOPES = "user-read-recently-played,user-library-modify,user-read-email,user-read-private,user-top-read";
 
     private SharedPreferences.Editor editor;
     private SharedPreferences msharedPreferences;
+
+    private Button loginBtn;
 
     private RequestQueue queue;
 
@@ -89,18 +95,25 @@ public class LoginActivity extends AppCompatActivity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getSupportActionBar().hide();
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.login_activity);
+
+        loginBtn = (Button) findViewById(R.id.Login);
+        loginBtn.setOnClickListener(v ->{
+            authenticateSpotify();
+            msharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
+            queue = Volley.newRequestQueue(this);
+        });
 
 
-        authenticateSpotify();
 
-        msharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
-        queue = Volley.newRequestQueue(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if(msharedPreferences != null && msharedPreferences.contains("token")) {
+            Log.d(TAG, msharedPreferences.getString("token", "null"));
+        }
         Log.d(TAG, "onResume() called");
     }
     @Override

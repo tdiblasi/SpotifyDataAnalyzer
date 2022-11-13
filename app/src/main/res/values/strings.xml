@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">Spotify Analyzer</string>
+    <string-array name="timespans_array">
+        <item>No Limit</item>
+        <item>Last 6 Months</item>
+        <item>Last Month</item>
+    </string-array>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -92,4 +97,13 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint">hint</string>
+    <string name="title_activity_history">HistoryActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>
