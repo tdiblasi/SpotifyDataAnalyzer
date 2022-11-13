@@ -12,8 +12,8 @@ import android.widget.Button;
 
 import com.android.volley.*;
 import com.android.volley.toolbox.Volley;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.example.spotifyanalyzer.spotifyuser.SpotifyUser;
+import com.example.spotifyanalyzer.spotifyuser.UserService;
 import com.spotify.sdk.android.auth.*;
 
 

@@ -1,16 +1,12 @@
 //  Code from https://towardsdatascience.com/using-the-spotify-api-with-your-android-application-the-essentials-1a3c1bc36b9e
-package com.example.spotifyanalyzer;
+package com.example.spotifyanalyzer.spotifyuser;
 
 import android.content.SharedPreferences;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.spotifyanalyzer.VolleyCallBack;
 import com.google.gson.Gson;
 
 import java.util.HashMap;

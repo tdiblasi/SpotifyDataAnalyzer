@@ -12,6 +12,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.spotifyanalyzer.song.Song;
+import com.example.spotifyanalyzer.song.SongService;
+
 import java.io.IOException;
 import java.util.ArrayList;
 

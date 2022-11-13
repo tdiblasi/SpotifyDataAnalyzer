@@ -11,10 +11,11 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 
 import com.example.spotifyanalyzer.R;
-import com.example.spotifyanalyzer.Song;
-import com.example.spotifyanalyzer.SongService;
+import com.example.spotifyanalyzer.artist.Artist;
+import com.example.spotifyanalyzer.artist.ArtistService;
+import com.example.spotifyanalyzer.song.Song;
+import com.example.spotifyanalyzer.song.SongService;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class HistoryActivity extends AppCompatActivity {
@@ -24,6 +25,8 @@ public class HistoryActivity extends AppCompatActivity {
 
     private SongService songService;
     private ArrayList<Song> favoriteTracks;
+    private ArtistService artistService;
+    private ArrayList<Artist> favoriteArtists;
 
 
     @Override
@@ -32,6 +35,7 @@ public class HistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_history);
 
         songService = new SongService(getApplicationContext());
+        artistService = new ArtistService(getApplicationContext());
         timeSpan = (Spinner) findViewById(R.id.timespan);
 // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> timespanAdapter = ArrayAdapter.createFromResource(this,
@@ -52,10 +56,10 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     private View.OnClickListener historyQueryListener = v -> {
-        getFavoriteTracks();
+        getFavorites();
     };
 
-    private void getFavoriteTracks() {
+    private void getFavorites() {
         String time_range;
         switch(timeSpan.getSelectedItem().toString()) {
             case "No Limit":
@@ -69,10 +73,17 @@ public class HistoryActivity extends AppCompatActivity {
             default:
                 time_range = "short_term";
         }
+        artistService.getFavoriteArtists(() -> {
+            favoriteArtists = artistService.getArtists();
+            for(Artist a : favoriteArtists) {
+                Log.d("SONG", a.getId());
+            }
+
+        }, time_range, songCount.getValue());
         songService.getFavoriteTracks(() -> {
             favoriteTracks = songService.getSongs();
             for(Song s : favoriteTracks) {
-                Log.d("SONG", s.getName());
+                Log.d("SONG", s.getId());
             }
 
         }, time_range, songCount.getValue());

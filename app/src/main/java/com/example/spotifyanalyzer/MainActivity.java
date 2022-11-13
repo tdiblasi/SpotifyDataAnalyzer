@@ -14,6 +14,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.spotifyanalyzer.history.HistoryActivity;
+import com.example.spotifyanalyzer.song.Song;
+import com.example.spotifyanalyzer.song.SongService;
 
 import java.io.IOException;
 import java.util.ArrayList;

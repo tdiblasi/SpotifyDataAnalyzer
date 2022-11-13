@@ -1,5 +1,5 @@
 //  Some code from https://towardsdatascience.com/using-the-spotify-api-with-your-android-application-the-essentials-1a3c1bc36b9e
-package com.example.spotifyanalyzer;
+package com.example.spotifyanalyzer.song;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,6 +10,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.spotifyanalyzer.UserListenData;
+import com.example.spotifyanalyzer.VolleyCallBack;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -64,7 +66,16 @@ public class SongService {
                             Song song = gson.fromJson(object.toString(), Song.class);
                             song.setArtist(object.getJSONArray("artists").getJSONObject(0).getString("name"));
                             song.setAlbumName(object.getJSONObject("album").getString("name"));
-                            songs.add(song);
+                            boolean exists = false;
+                            for(Song s: songs) {
+                                if (s.getId().equals(song.getId())) {
+                                    exists = true;
+                                    break;
+                                }
+                            }
+                            if(!exists) {
+                                songs.add(song);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -102,7 +113,16 @@ public class SongService {
                             Song song = gson.fromJson(object.toString(), Song.class);
                             song.setArtist(object.getJSONArray("artists").getJSONObject(0).getString("name"));
                             song.setAlbumName(object.getJSONObject("album").getString("name"));
-                            songs.add(song);
+                            boolean exists = false;
+                            for(Song s: songs) {
+                                if (s.getId().equals(song.getId())) {
+                                    exists = true;
+                                    break;
+                                }
+                            }
+                            if(!exists) {
+                                songs.add(song);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
