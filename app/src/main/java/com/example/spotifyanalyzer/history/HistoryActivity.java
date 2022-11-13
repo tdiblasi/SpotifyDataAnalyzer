@@ -2,6 +2,7 @@ package com.example.spotifyanalyzer.history;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 
+import com.example.spotifyanalyzer.LoginActivity;
+import com.example.spotifyanalyzer.MainActivity;
 import com.example.spotifyanalyzer.R;
 import com.example.spotifyanalyzer.artist.Artist;
 import com.example.spotifyanalyzer.artist.ArtistService;
@@ -22,6 +25,7 @@ public class HistoryActivity extends AppCompatActivity {
     private Spinner timeSpan;
     private NumberPicker songCount;
     private Button queryButton;
+    private boolean recievedArtists = false, receivedSongs = false;
 
     private SongService songService;
     private ArrayList<Song> favoriteTracks;
@@ -59,7 +63,16 @@ public class HistoryActivity extends AppCompatActivity {
         getFavorites();
     };
 
+    private void showFavorites() {
+//        newIntent.putExtra("songService",favoriteTracks);
+//        newIntent.putExtra("artistService",favoriteArtists);
+//        startActivity(newIntent);
+    }
+
     private void getFavorites() {
+        Intent newIntent = new Intent(HistoryActivity.this, ViewHistoryActivity.class);
+        recievedArtists = false;
+        receivedSongs = false;
         String time_range;
         switch(timeSpan.getSelectedItem().toString()) {
             case "No Limit":
@@ -76,16 +89,20 @@ public class HistoryActivity extends AppCompatActivity {
         artistService.getFavoriteArtists(() -> {
             favoriteArtists = artistService.getArtists();
             for(Artist a : favoriteArtists) {
-                Log.d("SONG", a.getId());
+                Log.d("Artist", a.getName());
             }
+            newIntent.putExtra("artistService",favoriteArtists);
+            songService.getFavoriteTracks(() -> {
+                favoriteTracks = songService.getSongs();
+                for(Song s : favoriteTracks) {
+                    Log.d("SONG", s.getId());
+                }
+                newIntent.putExtra("songService",favoriteTracks);
+                startActivity(newIntent);
+
+            }, time_range, songCount.getValue());
 
         }, time_range, songCount.getValue());
-        songService.getFavoriteTracks(() -> {
-            favoriteTracks = songService.getSongs();
-            for(Song s : favoriteTracks) {
-                Log.d("SONG", s.getId());
-            }
 
-        }, time_range, songCount.getValue());
     }
 }

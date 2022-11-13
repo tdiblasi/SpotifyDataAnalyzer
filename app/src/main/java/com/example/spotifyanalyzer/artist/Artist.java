@@ -1,29 +1,42 @@
 package com.example.spotifyanalyzer.artist;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Artist {
+public class Artist implements Serializable {
     private String id;
     private String name;
-    private String artist;
-    private String albumName;
-    private int duration_ms;
+    private String external_urls_str;
+    private String[] genres;
+    private String[] images_str;
 
-    public Artist(String id, String name, Integer duration_ms) {
+    public Artist(String id, String name, String[] genres) {
         this.name = name;
         this.id = id;
-        this.duration_ms = duration_ms;
+        this.genres = genres;
+    }
+
+    public void setURLs(JSONObject external_urls) {
+        this.external_urls_str = external_urls.toString();
+    }
+
+    public void setImages(JSONArray images) {
+        this.images_str = new String[images.length()];
+        for(int i = 0; i < images.length(); i++){
+            try {
+                this.images_str[i] = images.getJSONObject(i).toString();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public JSONObject getArtistJSON() {
         HashMap<String, String> map = new HashMap<String, String>();
-        map.put("id", this.id);
-        map.put("name", this.name);
-        map.put("artist", this.artist);
-        map.put("albumName", this.albumName);
-        map.put("duration_ms", ""+this.duration_ms);
         return new JSONObject(map);
     }
 
@@ -43,27 +56,7 @@ public class Artist {
         this.name = name;
     }
 
-    public String getArtist() {
-        return artist;
-    }
-
-    public void setArtist(String artist) {
-        this.artist = artist;
-    }
-
-    public String getAlbumName() {
-        return albumName;
-    }
-
-    public void setAlbumName(String albumName) {
-        this.albumName = albumName;
-    }
-
-    public int getDuration() {
-        return duration_ms;
-    }
-
-    public void setDuration(int duration) {
-        this.duration_ms = duration_ms;
+    public String[] getGenres() {
+        return this.genres;
     }
 }

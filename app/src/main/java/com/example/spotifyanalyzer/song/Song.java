@@ -3,9 +3,10 @@ package com.example.spotifyanalyzer.song;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Song {
+public class Song implements Serializable {
     private String id;
     private String name;
     private String artist;

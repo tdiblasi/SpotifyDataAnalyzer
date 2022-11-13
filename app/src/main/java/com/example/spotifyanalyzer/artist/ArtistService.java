@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,12 +27,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class ArtistService {
+public class ArtistService implements Serializable {
     private ArrayList<Artist> artists = new ArrayList<>();
     private SharedPreferences sharedPreferences;
     private RequestQueue queue;
-
-    private DatabaseReference databaseReference;
 
     public ArtistService(Context context) {
         sharedPreferences = context.getSharedPreferences("SPOTIFY", 0);
@@ -55,8 +54,8 @@ public class ArtistService {
                             JSONObject object = jsonArray.getJSONObject(n);
                             //object = object.optJSONObject("track");
                             Artist artist = gson.fromJson(object.toString(), Artist.class);
-                            artist.setArtist(object.getJSONArray("artists").getJSONObject(0).getString("name"));
-                            artist.setAlbumName(object.getJSONObject("album").getString("name"));
+                            artist.setURLs(object.getJSONObject("external_urls"));
+                            artist.setImages(object.getJSONArray("images"));
                             boolean exists = false;
                             for(Artist s: artists) {
                                 if (s.getId().equals(artist.getId())) {

@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,26 +27,26 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class SongService {
+public class SongService implements Serializable {
     private ArrayList<Song> songs = new ArrayList<>();
     private SharedPreferences sharedPreferences;
     private RequestQueue queue;
 
-    private DatabaseReference databaseReference;
+    //private DatabaseReference databaseReference;
 
-    public Task<Void> addFavoriteSongs(UserListenData usl){
-        return this.databaseReference.push().setValue(usl);
-    }
-
-    public Task<Void> update(String key, HashMap<String, Object> hashMap){
-        return this.databaseReference.child(key).updateChildren(hashMap);
-    }
+//    public Task<Void> addFavoriteSongs(UserListenData usl){
+//        return this.databaseReference.push().setValue(usl);
+//    }
+//
+//    public Task<Void> update(String key, HashMap<String, Object> hashMap){
+//        return this.databaseReference.child(key).updateChildren(hashMap);
+//    }
 
     public SongService(Context context) {
         sharedPreferences = context.getSharedPreferences("SPOTIFY", 0);
         queue = Volley.newRequestQueue(context);
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        this.databaseReference = db.getReference(UserListenData.class.getSimpleName());
+        //this.databaseReference = db.getReference(UserListenData.class.getSimpleName());
 
     }
 
