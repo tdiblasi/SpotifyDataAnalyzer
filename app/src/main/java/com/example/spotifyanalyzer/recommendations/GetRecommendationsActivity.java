@@ -45,12 +45,15 @@ public class GetRecommendationsActivity extends AppCompatActivity {
     };
 
     private void getRecommendations() {
-
+        Intent newIntent = new Intent(GetRecommendationsActivity.this, RecommendationsQueueActivity.class);
         songService.getRecommendations(() -> {
             recommendedTracks = songService.getSongs();
             for(Song s : recommendedTracks) {
                 Log.d("RECOMMEND", s.getName());
             }
+            newIntent.putExtra("queue",recommendedTracks);
+            startActivity(newIntent);
+
 
         }, SAMPLE_SONGS);
 
