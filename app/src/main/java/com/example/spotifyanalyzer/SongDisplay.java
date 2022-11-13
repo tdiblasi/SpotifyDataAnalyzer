@@ -68,9 +68,9 @@ public class SongDisplay extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         Log.d(TAG, "onViewCreated() called");
         super.onViewCreated(view, savedInstanceState);
-//        durationColumn = (TextView) view.findViewById(R.id.duration);
-//        artistColumn = (TextView) view.findViewById(R.id.artist);
-//        albumColumn = (TextView) view.findViewById(R.id.albumName);
+        durationColumn = (TextView) view.findViewById(R.id.duration);
+        artistColumn = (TextView) view.findViewById(R.id.artist);
+        albumColumn = (TextView) view.findViewById(R.id.albumName);
         durationColumn.setText("Duration:\n"+(duration/60) + ":" + (duration % 60));
         artistColumn.setText("Artist:\n"+artist);
         albumColumn.setText("Album Title:\n"+albumName);

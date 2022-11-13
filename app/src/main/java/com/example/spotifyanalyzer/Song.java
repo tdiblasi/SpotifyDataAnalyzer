@@ -3,6 +3,8 @@ package com.example.spotifyanalyzer;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 public class Song {
     private String id;
     private String name;
@@ -14,6 +16,16 @@ public class Song {
         this.name = name;
         this.id = id;
         this.duration_ms = duration_ms;
+    }
+
+    public JSONObject getSongJSON() {
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("id", this.id);
+        map.put("name", this.name);
+        map.put("artist", this.artist);
+        map.put("albumName", this.albumName);
+        map.put("duration_ms", ""+this.duration_ms);
+        return new JSONObject(map);
     }
 
     public String getId() {

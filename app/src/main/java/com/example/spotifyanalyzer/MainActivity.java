@@ -2,25 +2,20 @@
 package com.example.spotifyanalyzer;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.spotifyanalyzer.history.HistoryActivity;
+
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Activity: MainActivity";
     private TextView songView;
     private Button addBtn;
+    private Button historyBtn;
     private Song song;
     private FrameLayout songFragmentDisplay;
 
@@ -58,24 +54,24 @@ public class MainActivity extends AppCompatActivity {
 //            dao.add(user);
 //        });
 
-//        Log.d(TAG, "onCreate() called");
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//
-//        songService = new SongService(getApplicationContext());
-//        songView = (TextView) findViewById(R.id.song);
-//        addBtn = (Button) findViewById(R.id.add);
-//        songFragmentDisplay = (FrameLayout) findViewById(R.id.songFragmentFrame);
-//
-//        SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
-//
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        ft.replace(songFragmentDisplay.getId(), new SongDisplay());
-//        ft.commit();
-//
-//        getTracks();
-//
-//        addBtn.setOnClickListener(addListener);
+        Log.d(TAG, "onCreate() called");
+
+        songService = new SongService(getApplicationContext());
+        songView = (TextView) findViewById(R.id.song);
+        addBtn = (Button) findViewById(R.id.add);
+        historyBtn = (Button) findViewById(R.id.history);
+        songFragmentDisplay = (FrameLayout) findViewById(R.id.songFragmentFrame);
+
+        SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(songFragmentDisplay.getId(), new SongDisplay());
+        ft.commit();
+
+        getTracks();
+
+        addBtn.setOnClickListener(addListener);
+        historyBtn.setOnClickListener(historyListener);
     }
 
     private View.OnClickListener addListener = v -> {
@@ -88,6 +84,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    };
+
+    private View.OnClickListener historyListener = v -> {
+        Intent newHistory = new Intent(this, HistoryActivity.class);
+        startActivity(newHistory);
     };
 
 
