@@ -22,6 +22,7 @@ import com.example.spotifyanalyzer.song.SongService;
 import java.util.ArrayList;
 
 public class HistoryActivity extends AppCompatActivity {
+    private static final String TAG = "HistoryActivity";
     private Spinner timeSpan;
     private NumberPicker songCount;
     private Button queryButton;
@@ -104,5 +105,26 @@ public class HistoryActivity extends AppCompatActivity {
 
         }, time_range, songCount.getValue());
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume() called");
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause() called");
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop() called");
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy() called");
     }
 }

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.spotifyanalyzer.R;
@@ -22,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ViewHistoryActivity extends AppCompatActivity {
+
+    private static final String TAG = "ViewHistoryActivity";
     private TextView songsList, artistsList, genresList;
     private ArrayList<Song> songs;
     private ArrayList<Artist> artists;
@@ -117,5 +120,26 @@ public class ViewHistoryActivity extends AppCompatActivity {
         }
 
         return sortedMap;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume() called");
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause() called");
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop() called");
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy() called");
     }
 }

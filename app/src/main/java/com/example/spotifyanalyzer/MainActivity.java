@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.spotifyanalyzer.history.HistoryActivity;
+import com.example.spotifyanalyzer.recommendations.GetRecommendationsActivity;
 import com.example.spotifyanalyzer.song.Song;
 import com.example.spotifyanalyzer.song.SongService;
 
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView songView;
     private Button addBtn;
     private Button historyBtn;
+    private Button recommendationsBtn;
     private Song song;
     private FrameLayout songFragmentDisplay;
 
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button newBtn = findViewById(R.id.newList);
         Button loadBtn = findViewById(R.id.loadLists);
+        Button recommendationsBtn = findViewById(R.id.recommendations);
 
 
 
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         addBtn.setOnClickListener(addListener);
         historyBtn.setOnClickListener(historyListener);
+        recommendationsBtn.setOnClickListener(recommendationsListener);
     }
 
     private View.OnClickListener addListener = v -> {
@@ -91,6 +95,11 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener historyListener = v -> {
         Intent newHistory = new Intent(this, HistoryActivity.class);
         startActivity(newHistory);
+    };
+
+    private View.OnClickListener recommendationsListener = v -> {
+        Intent newRecommendations = new Intent(this, GetRecommendationsActivity.class);
+        startActivity(newRecommendations);
     };
 
 

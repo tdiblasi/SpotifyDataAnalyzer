@@ -143,17 +143,61 @@ public class SongService implements Serializable {
                 return headers;
             }
 
+        };
+        queue.add(jsonObjectRequest);
+        return songs;
+    }
 
-//            @Override
-//            protected Map<String, String> getParams()
-//            {
-//                Map<String, String>  params = new HashMap<String, String>();
-//                params.put("limit", "" + 1);
-//                params.put("time_range", timespan);
-//
-//                return params;
-//            }
+    public ArrayList<Song> getRecommendations(final VolleyCallBack callBack, String[] seedSongs) {
+        String endpoint = "https://api.spotify.com/v1/recommendations";
+        endpoint = endpoint + "?seed_tracks=";
+        boolean first = true;
+        for(String song : seedSongs) {
+            if(!first) {
+                endpoint = endpoint + ",";
+            } else {
+                first = false;
+            }
+            endpoint = endpoint + song;
+        }
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, endpoint, null, response -> {
+                    Gson gson = new Gson();
+                    JSONArray jsonArray = response.optJSONArray("tracks");
+                    for (int n = 0; n < jsonArray.length(); n++) {
+                        try {
+                            JSONObject object = jsonArray.getJSONObject(n);
+                            Song song = gson.fromJson(object.toString(), Song.class);
+                            song.setArtist(object.getJSONArray("artists").getJSONObject(0).getString("name"));
+                            song.setAlbumName(object.getJSONObject("album").getString("name"));
+                            boolean exists = false;
+                            for(Song s: songs) {
+                                if (s.getId().equals(song.getId())) {
+                                    exists = true;
+                                    break;
+                                }
+                            }
+                            if(!exists) {
+                                songs.add(song);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    callBack.onSuccess();
+                }, error -> {
+                    Log.v("Song ERROR", "Error retrieving song list");
 
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String token = sharedPreferences.getString("token", "");
+                Log.d("TOKEN", token);
+                String auth = "Bearer " + token;
+                headers.put("Authorization", auth);
+                return headers;
+            }
         };
         queue.add(jsonObjectRequest);
         return songs;

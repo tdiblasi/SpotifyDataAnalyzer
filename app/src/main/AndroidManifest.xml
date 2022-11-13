@@ -19,9 +19,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".recommendations.GetRecommendationsActivity"
+            android:exported="false" />
+        <activity
             android:name=".history.ViewHistoryActivity"
             android:exported="false"
-            android:label="@string/title_activity_history"/>
+            android:label="@string/title_activity_history" />
         <activity
             android:name=".history.HistoryActivity"
             android:exported="false"
