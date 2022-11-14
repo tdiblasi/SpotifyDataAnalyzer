@@ -12,6 +12,7 @@ public class Song implements Serializable {
     private String artist;
     private String albumName;
     private int duration_ms;
+    private String albumCoverUrl;
 
     public Song(String id, String name, Integer duration_ms) {
         this.name = name;
@@ -68,4 +69,8 @@ public class Song implements Serializable {
     public void setDuration(int duration) {
         this.duration_ms = duration_ms;
     }
+
+    public String getAlbumCover() { return this.albumCoverUrl;}
+
+    public void setAlbumCoverUrl(String url) { this.albumCoverUrl = url;}
 }

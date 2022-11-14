@@ -66,6 +66,7 @@ public class SongService implements Serializable {
                             object = object.optJSONObject("track");
                             Song song = gson.fromJson(object.toString(), Song.class);
                             song.setArtist(object.getJSONArray("artists").getJSONObject(0).getString("name"));
+                            song.setAlbumCoverUrl(object.getJSONObject("album").getJSONArray("images").getJSONObject(0).getString("url"));
                             song.setAlbumName(object.getJSONObject("album").getString("name"));
                             boolean exists = false;
                             for(Song s: songs) {
@@ -114,6 +115,7 @@ public class SongService implements Serializable {
                             Song song = gson.fromJson(object.toString(), Song.class);
                             song.setArtist(object.getJSONArray("artists").getJSONObject(0).getString("name"));
                             song.setAlbumName(object.getJSONObject("album").getString("name"));
+                            song.setAlbumCoverUrl(object.getJSONObject("album").getJSONArray("images").getJSONObject(0).getString("url"));
                             boolean exists = false;
                             for(Song s: songs) {
                                 if (s.getId().equals(song.getId())) {
@@ -170,6 +172,8 @@ public class SongService implements Serializable {
                             Song song = gson.fromJson(object.toString(), Song.class);
                             song.setArtist(object.getJSONArray("artists").getJSONObject(0).getString("name"));
                             song.setAlbumName(object.getJSONObject("album").getString("name"));
+                            song.setAlbumCoverUrl(object.getJSONObject("album").getJSONArray("images").getJSONObject(0).getString("url"));
+
                             boolean exists = false;
                             for(Song s: songs) {
                                 if (s.getId().equals(song.getId())) {
@@ -206,13 +210,15 @@ public class SongService implements Serializable {
 
     public void addSongToLibrary(Song song) {
         JSONObject payload = preparePutPayload(song);
-        JsonObjectRequest jsonObjectRequest = prepareSongLibraryRequest(payload);
+        JsonObjectRequest jsonObjectRequest = prepareSongLibraryRequest(payload, song.getId());
         queue.add(jsonObjectRequest);
     }
 
-    private JsonObjectRequest prepareSongLibraryRequest(JSONObject payload) {
-        return new JsonObjectRequest(Request.Method.PUT, "https://api.spotify.com/v1/me/tracks", payload, response -> {
+    private JsonObjectRequest prepareSongLibraryRequest(JSONObject payload, String songId) {
+        return new JsonObjectRequest(Request.Method.PUT, "https://api.spotify.com/v1/me/tracks?ids=" + songId, payload, response -> {
+            Log.e("LIBRARY", "SUCCESS");
         }, error -> {
+            Log.e("LIBRARY", "FAIL");
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {

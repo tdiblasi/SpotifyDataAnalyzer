@@ -23,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String CLIENT_ID = "8ab9226475db4ffca0159c755076590f";
     private static final String REDIRECT_URI = "com.example.spotifytestv4://callback";
     private static final int REQUEST_CODE = 1337;
-    private static final String SCOPES = "user-read-recently-played,user-library-modify,user-read-email,user-read-private,user-top-read";
+    private static final String SCOPES = "user-read-recently-played,user-library-read,user-library-modify,user-read-email,user-read-private,user-top-read";
 
     private SharedPreferences.Editor editor;
     private SharedPreferences msharedPreferences;

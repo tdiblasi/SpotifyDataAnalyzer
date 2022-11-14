@@ -69,28 +69,25 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
 
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(songFragmentDisplay.getId(), new SongDisplay());
-        ft.commit();
 
-        getTracks();
+//        getTracks();
 
-        addBtn.setOnClickListener(addListener);
+//        addBtn.setOnClickListener(addListener);
         historyBtn.setOnClickListener(historyListener);
         recommendationsBtn.setOnClickListener(recommendationsListener);
     }
 
-    private View.OnClickListener addListener = v -> {
-        songService.addSongToLibrary(this.song);
-        if (recentlyPlayedTracks.size() > 0) {
-            recentlyPlayedTracks.remove(0);
-        }
-        try {
-            updateSong();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    };
+//    private View.OnClickListener addListener = v -> {
+//        songService.addSongToLibrary(this.song);
+//        if (recentlyPlayedTracks.size() > 0) {
+//            recentlyPlayedTracks.remove(0);
+//        }
+//        try {
+//            updateSong();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    };
 
     private View.OnClickListener historyListener = v -> {
         Intent newHistory = new Intent(this, HistoryActivity.class);
@@ -103,35 +100,35 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
-    private void getTracks() {
-        songService.getRecentlyPlayedTracks(() -> {
-            recentlyPlayedTracks = songService.getSongs();
-            try {
-                updateSong();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//    private void getTracks() {
+//        songService.getRecentlyPlayedTracks(() -> {
+//            recentlyPlayedTracks = songService.getSongs();
+//            try {
+//                updateSong();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//        });
+//    }
 
-        });
-    }
-
-    private void updateSong() throws IOException {
-        if (recentlyPlayedTracks.size() > 0) {
-            songView.setText(recentlyPlayedTracks.get(0).getName());
-            song = recentlyPlayedTracks.get(0);
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            SongDisplay songDisplay = new SongDisplay();
-            Bundle songData = new Bundle();
-            songData.putInt("duration", song.getDuration());
-            songData.putString("artist", song.getArtist());
-            songData.putString("albumName", song.getAlbumName());
-            songDisplay.setArguments(songData);
-            ft.replace(songFragmentDisplay.getId(), songDisplay);
-            ft.commit();
-
-        }
-
-    }
+//    private void updateSong() throws IOException {
+//        if (recentlyPlayedTracks.size() > 0) {
+//            songView.setText(recentlyPlayedTracks.get(0).getName());
+//            song = recentlyPlayedTracks.get(0);
+//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//            SongDisplay songDisplay = new SongDisplay();
+//            Bundle songData = new Bundle();
+//            songData.putInt("duration", song.getDuration());
+//            songData.putString("artist", song.getArtist());
+//            songData.putString("albumName", song.getAlbumName());
+//            songDisplay.setArguments(songData);
+//            ft.replace(songFragmentDisplay.getId(), songDisplay);
+//            ft.commit();
+//
+//        }
+//
+//    }
 
     @Override
     public void onResume() {

@@ -48,15 +48,26 @@ public class RecommendationsQueueActivity extends AppCompatActivity {
 
     public void showNextSong() {
         songFragmentDisplay = (FrameLayout) findViewById(R.id.recommendationSongFragmentFrame);
-        Song song = songs.get(this.pos++);
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        SongDisplay songDisplay = new SongDisplay();
-        Bundle songData = new Bundle();
-        songData.putInt("duration", song.getDuration());
-        songData.putString("artist", song.getArtist());
-        songData.putString("albumName", song.getAlbumName());
-        songDisplay.setArguments(songData);
-        ft.replace(songFragmentDisplay.getId(), songDisplay);
-        ft.commit();
+        if(this.pos < songs.size()) {
+            Song song = songs.get(this.pos++);
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            SongDisplay songDisplay = new SongDisplay();
+            Bundle songData = new Bundle();
+            songData.putInt("duration", song.getDuration());
+            songData.putString("artist", song.getArtist());
+            songData.putString("albumName", song.getAlbumName());
+            songData.putString("albumCoverUrl", song.getAlbumCover());
+            songData.putString("id", song.getId());
+            songData.putSerializable("songObj", song);
+
+            songDisplay.setArguments(songData);
+            ft.replace(songFragmentDisplay.getId(), songDisplay);
+            ft.commit();
+            if(this.pos >= songs.size()) {
+                nextSong.setEnabled(false);
+            }
+        } else {
+            Log.e(TAG, "End of queue error");
+        }
     };
 }

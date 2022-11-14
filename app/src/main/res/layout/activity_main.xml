@@ -123,17 +123,5 @@
         android:layout_gravity="center"
         tools:text="@tools:sample/cities" />
 
-    <FrameLayout
-        android:id="@+id/songFragmentFrame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_gravity="center"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="60dp">
-
-    </FrameLayout>
-
 
 </LinearLayout>
