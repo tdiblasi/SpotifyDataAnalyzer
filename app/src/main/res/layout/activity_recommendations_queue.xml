@@ -15,7 +15,7 @@
         android:padding="6dp"
         android:weightSum="2"
 
-        android:layout_marginTop="70dp">
+        android:layout_marginTop="20dp">
 
 
         <Button

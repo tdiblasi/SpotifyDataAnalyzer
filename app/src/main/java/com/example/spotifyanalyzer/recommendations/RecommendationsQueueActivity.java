@@ -64,6 +64,7 @@ public class RecommendationsQueueActivity extends AppCompatActivity {
             ft.replace(songFragmentDisplay.getId(), songDisplay);
             ft.commit();
             if(this.pos >= songs.size()) {
+                nextSong.setText("End of Queue");
                 nextSong.setEnabled(false);
             }
         } else {

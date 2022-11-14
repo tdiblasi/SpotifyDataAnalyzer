@@ -191,7 +191,7 @@ public class SongService implements Serializable {
                     callBack.onSuccess();
                 }, error -> {
                     Log.v("Song ERROR", "Error retrieving song list");
-
+                    Log.v("ERROR", error.toString());
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {

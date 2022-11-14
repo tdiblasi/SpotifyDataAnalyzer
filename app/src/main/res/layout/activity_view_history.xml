@@ -5,26 +5,100 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:weightSum="3"
+    android:padding="15dp"
     tools:context=".history.ViewHistoryActivity">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/linearLayoutFavTracks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="6dp"
+        android:layout_weight="1"
+
+        >
+        <TextView
+        android:id="@+id/SongsString"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:textSize="25dp"
+        android:text="Favorite Songs:" />
+
+        <TextView
         android:id="@+id/topSongs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Songs" />
 
-    <TextView
-        android:id="@+id/topArtists"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="TextView" />
+        android:textSize="20dp"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:text="" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/topGenres"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearLayoutFavArtists"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="6dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/artistsString"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textSize="25dp"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:text="Favorite Artists:" />
+
+        <TextView
+            android:id="@+id/topArtists"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textSize="20dp"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center"
+            android:text="" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutFavGenres"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="6dp"
         android:layout_weight="1"
-        android:text="TextView" />
+
+        >
+        <TextView
+            android:id="@+id/GenresString"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textSize="25dp"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:text="Favorite Genres:" />
+
+        <TextView
+            android:id="@+id/topGenres"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            
+            android:textSize="20dp"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center"
+            android:text="" />
+    </LinearLayout>
+
 </LinearLayout>

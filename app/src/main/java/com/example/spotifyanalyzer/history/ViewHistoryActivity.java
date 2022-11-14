@@ -54,7 +54,8 @@ public class ViewHistoryActivity extends AppCompatActivity {
             if(i > 0) {
                 list = list + "\n";
             }
-            list = list + (i+1) + ".) " + songs.get(i).getName();
+//            list = list + (i+1) + ".) ";
+            list = list + songs.get(i).getName();
         }
         return list;
     }
@@ -66,7 +67,8 @@ public class ViewHistoryActivity extends AppCompatActivity {
             if(i > 0) {
                 list = list + "\n";
             }
-            list = list + (i+1) + ".) " + artists.get(i).getName();
+//            list = list + (i+1) + ".) ";
+            list = list + artists.get(i).getName();
         }
         return list;
     }
@@ -94,7 +96,8 @@ public class ViewHistoryActivity extends AppCompatActivity {
             if(i > 0) {
                 list = list + "\n";
             }
-            list = list + (i+1) + ".) " + entry.getKey();
+//            list = list + (i+1) + ".) ";
+            list = list + entry.getKey();
             i++;
         }
         return list;

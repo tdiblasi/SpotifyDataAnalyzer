@@ -24,13 +24,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Get My Listening History"
+            android:text="Update My Listening History"
             android:layout_weight="1" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayoutAdd"
+        android:id="@+id/linearLayoutShowHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -42,14 +42,36 @@
 
 
         <Button
-            android:id="@+id/add"
+            android:id="@+id/showHistory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Add"
+            android:text="Show My Listening History"
             android:layout_weight="1" />
 
     </LinearLayout>
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/linearLayoutAdd"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:gravity="center_horizontal"-->
+<!--        android:padding="6dp"-->
+<!--        android:weightSum="2"-->
+
+<!--        android:layout_marginTop="70dp">-->
+
+
+<!--        <Button-->
+<!--            android:id="@+id/add"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:text="Add"-->
+<!--            android:layout_weight="1" />-->
+
+<!--    </LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/linearLayoutRecommendations"
@@ -74,27 +96,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayoutLoad"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal"
-        android:padding="6dp"
-        android:weightSum="2"
-        android:layout_marginTop="70dp">
-
-        <Button
-            android:id="@+id/loadLists"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Load"
-            android:layout_weight="1" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayoutNew"
+        android:id="@+id/linearLayoutSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -106,22 +108,56 @@
 
 
         <Button
-            android:id="@+id/newList"
+            android:id="@+id/settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="New"
+            android:text="Settings"
             android:layout_weight="1" />
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/song"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:layout_gravity="center"
-        tools:text="@tools:sample/cities" />
+<!--    <LinearLayout-->
+<!--        android:id="@+id/linearLayoutLoad"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:gravity="center_horizontal"-->
+<!--        android:padding="6dp"-->
+<!--        android:weightSum="2"-->
+<!--        android:layout_marginTop="70dp">-->
+
+<!--        <Button-->
+<!--            android:id="@+id/loadLists"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:text="Load"-->
+<!--            android:layout_weight="1" />-->
+
+<!--    </LinearLayout>-->
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/linearLayoutNew"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:gravity="center_horizontal"-->
+<!--        android:padding="6dp"-->
+<!--        android:weightSum="2"-->
+
+<!--        android:layout_marginTop="70dp">-->
+
+
+<!--        <Button-->
+<!--            android:id="@+id/newList"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:text="New"-->
+<!--            android:layout_weight="1" />-->
+
+<!--    </LinearLayout>-->
 
 
 </LinearLayout>

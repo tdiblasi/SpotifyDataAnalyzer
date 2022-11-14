@@ -13,8 +13,13 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.example.spotifyanalyzer.artist.Artist;
+import com.example.spotifyanalyzer.artist.ArtistService;
 import com.example.spotifyanalyzer.history.HistoryActivity;
+import com.example.spotifyanalyzer.history.ViewHistoryActivity;
 import com.example.spotifyanalyzer.recommendations.GetRecommendationsActivity;
+import com.example.spotifyanalyzer.recommendations.RecommendationsQueueActivity;
+import com.example.spotifyanalyzer.settings.SettingsActivity;
 import com.example.spotifyanalyzer.song.Song;
 import com.example.spotifyanalyzer.song.SongService;
 
@@ -27,12 +32,13 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Activity: MainActivity";
     private TextView songView;
     private Button addBtn;
-    private Button historyBtn;
+    private Button historyBtn, showHistoryButton, settingsButton;
     private Button recommendationsBtn;
     private Song song;
     private FrameLayout songFragmentDisplay;
 
     private SongService songService;
+    private ArtistService artistService;
     private ArrayList<Song> recentlyPlayedTracks;
 
     @Override
@@ -44,16 +50,17 @@ public class MainActivity extends AppCompatActivity {
 //        final EditText edit_password = findViewById(R.id.edit_password);
 //        Button btn = findViewById(R.id.add_button);
 
-        Button newBtn = findViewById(R.id.newList);
-        Button loadBtn = findViewById(R.id.loadLists);
-        Button recommendationsBtn = findViewById(R.id.recommendations);
-
-
-
-        newBtn.setOnClickListener(v ->{
-            Intent newListData = new Intent(this, UserListenDataActivity.class);
-            startActivity(newListData);
-        });
+//        Button newBtn = findViewById(R.id.newList);
+//        Button loadBtn = findViewById(R.id.loadLists);
+        recommendationsBtn = (Button) findViewById(R.id.recommendations);
+        settingsButton = (Button) findViewById(R.id.settings);
+//
+//
+//
+//        newBtn.setOnClickListener(v ->{
+//            Intent newListData = new Intent(this, UserListenDataActivity.class);
+//            startActivity(newListData);
+//        });
 //        newBtn.setOnClickListener(v ->{
 //            UserCrud user = new UserCrud(edit_name.getText().toString(), edit_password.getText().toString());
 //            dao.add(user);
@@ -62,9 +69,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate() called");
 
         songService = new SongService(getApplicationContext());
+        artistService = new ArtistService(getApplicationContext());
         songView = (TextView) findViewById(R.id.song);
         addBtn = (Button) findViewById(R.id.add);
         historyBtn = (Button) findViewById(R.id.history);
+        showHistoryButton = (Button) findViewById(R.id.showHistory);
         songFragmentDisplay = (FrameLayout) findViewById(R.id.songFragmentFrame);
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
@@ -73,7 +82,9 @@ public class MainActivity extends AppCompatActivity {
 //        getTracks();
 
 //        addBtn.setOnClickListener(addListener);
+        settingsButton.setOnClickListener(settingsListener);
         historyBtn.setOnClickListener(historyListener);
+        showHistoryButton.setOnClickListener(showHistoryListener);
         recommendationsBtn.setOnClickListener(recommendationsListener);
     }
 
@@ -89,15 +100,60 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    };
 
+    private View.OnClickListener settingsListener = v -> {
+        Intent newSettings = new Intent(this, SettingsActivity.class);
+        startActivity(newSettings);
+    };
+
     private View.OnClickListener historyListener = v -> {
         Intent newHistory = new Intent(this, HistoryActivity.class);
         startActivity(newHistory);
     };
 
+    private View.OnClickListener showHistoryListener = v -> {
+        getFavorites();
+    };
+
+
     private View.OnClickListener recommendationsListener = v -> {
         Intent newRecommendations = new Intent(this, GetRecommendationsActivity.class);
         startActivity(newRecommendations);
     };
+
+    private void getFavorites() {
+        Intent newIntent = new Intent(this, ViewHistoryActivity.class);
+        String time_range;
+        switch("No Limit") {
+            case "No Limit":
+                time_range = "long_term";
+                break;
+
+            case "Last 6 Months":
+                time_range = "medium_term";
+                break;
+
+            default:
+                time_range = "short_term";
+        }
+        artistService.getFavoriteArtists(() -> {
+            ArrayList<Artist> favoriteArtists = artistService.getArtists();
+            for(Artist a : favoriteArtists) {
+                Log.d("Artist", a.getName());
+            }
+            newIntent.putExtra("artistService",favoriteArtists);
+            songService.getFavoriteTracks(() -> {
+                ArrayList<Song> favoriteTracks = songService.getSongs();
+                for(Song s : favoriteTracks) {
+                    Log.d("SONG", s.getId());
+                }
+                newIntent.putExtra("songService",favoriteTracks);
+                startActivity(newIntent);
+
+            }, time_range, 50);
+
+        }, time_range, 50);
+
+    }
 
 
 //    private void getTracks() {

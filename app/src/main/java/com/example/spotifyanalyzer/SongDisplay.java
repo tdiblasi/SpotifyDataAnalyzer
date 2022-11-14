@@ -18,6 +18,8 @@ import com.bumptech.glide.Glide;
 import com.example.spotifyanalyzer.song.Song;
 import com.example.spotifyanalyzer.song.SongService;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 
 /**
@@ -30,11 +32,11 @@ public class SongDisplay extends Fragment {
     private static final String TAG = "Fragments: SongDisplay";
     private int duration;
     private String songName, artist, albumName, albumCoverUrl, id;
-    private TextView songColumn, durationColumn, artistColumn, albumColumn;
+    private TextView durationColumn, artistColumn, albumColumn, titleView;
     private ImageView albumCover;
     private Song currentSong;
     private SongService songService;
-    private Button addButton;
+    private Button addButton, listenButton;
 
     public SongDisplay() {
         // Required empty public constructor
@@ -89,24 +91,25 @@ public class SongDisplay extends Fragment {
         artist = currentSong.getArtist();
         albumName = currentSong.getAlbumName();
 
-        songColumn = (TextView) view.findViewById(R.id.recomSongName);
         durationColumn = (TextView) view.findViewById(R.id.duration);
         artistColumn = (TextView) view.findViewById(R.id.artist);
         albumColumn = (TextView) view.findViewById(R.id.albumName);
         albumCover = (ImageView) view.findViewById(R.id.albumCover);
         addButton = (Button) view.findViewById(R.id.recomAddBtn);
+        listenButton = (Button) view.findViewById(R.id.ListenBtn);
+        titleView = (TextView) view.findViewById(R.id.recomSongTitle);
 
 
         Glide.with(view)
                 .load(albumCoverUrl)
                 .override(840, 840)
                 .into(albumCover);
-        songColumn.setText(songName);
-        durationColumn.setText("Duration:\n"+(duration/60) + ":" + String.format("%02d",duration % 60));
-        artistColumn.setText("Artist:\n"+artist);
-        albumColumn.setText("Album Title:\n"+albumName);
+        titleView.setText(songName);
+        durationColumn.setText((duration/60) + ":" + String.format("%02d",duration % 60));
+        artistColumn.setText(artist);
+        albumColumn.setText(albumName);
 
-        songColumn.setOnClickListener(songListener);
+        listenButton.setOnClickListener(songListener);
         addButton.setOnClickListener(addListener);
     }
 

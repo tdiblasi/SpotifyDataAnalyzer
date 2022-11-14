@@ -20,10 +20,10 @@ import java.util.ArrayList;
 public class GetRecommendationsActivity extends AppCompatActivity {
     private final String TAG = "GetRecommsActivity";
     private final String[] SAMPLE_SONGS = {
-            "2QbGvQssb0VLLS4x5NOmyJ",
-            "1q8DwZtQen5fvyB7cKbShC",
-            "2HbKqm4o0w5wEeEFXm2sD4",
-            "564oa00vY05d1uYnTEAAmE",
+//            "2QbGvQssb0VLLS4x5NOmyJ",
+//            "1q8DwZtQen5fvyB7cKbShC",
+//            "2HbKqm4o0w5wEeEFXm2sD4",
+//            "564oa00vY05d1uYnTEAAmE",
             "1GmIFHYT3N2V3G0MoYhEil"
     };
     private Button queryButton;
