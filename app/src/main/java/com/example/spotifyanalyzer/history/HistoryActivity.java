@@ -2,6 +2,7 @@ package com.example.spotifyanalyzer.history;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,20 +11,27 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 
+import com.example.spotifyanalyzer.LoginActivity;
+import com.example.spotifyanalyzer.MainActivity;
 import com.example.spotifyanalyzer.R;
-import com.example.spotifyanalyzer.Song;
-import com.example.spotifyanalyzer.SongService;
+import com.example.spotifyanalyzer.artist.Artist;
+import com.example.spotifyanalyzer.artist.ArtistService;
+import com.example.spotifyanalyzer.song.Song;
+import com.example.spotifyanalyzer.song.SongService;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class HistoryActivity extends AppCompatActivity {
+    private static final String TAG = "HistoryActivity";
     private Spinner timeSpan;
     private NumberPicker songCount;
     private Button queryButton;
+    private boolean recievedArtists = false, receivedSongs = false;
 
     private SongService songService;
     private ArrayList<Song> favoriteTracks;
+    private ArtistService artistService;
+    private ArrayList<Artist> favoriteArtists;
 
 
     @Override
@@ -32,6 +40,7 @@ public class HistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_history);
 
         songService = new SongService(getApplicationContext());
+        artistService = new ArtistService(getApplicationContext());
         timeSpan = (Spinner) findViewById(R.id.timespan);
 // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> timespanAdapter = ArrayAdapter.createFromResource(this,
@@ -52,10 +61,19 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     private View.OnClickListener historyQueryListener = v -> {
-        getFavoriteTracks();
+        getFavorites();
     };
 
-    private void getFavoriteTracks() {
+    private void showFavorites() {
+//        newIntent.putExtra("songService",favoriteTracks);
+//        newIntent.putExtra("artistService",favoriteArtists);
+//        startActivity(newIntent);
+    }
+
+    private void getFavorites() {
+        Intent newIntent = new Intent(HistoryActivity.this, ViewHistoryActivity.class);
+        recievedArtists = false;
+        receivedSongs = false;
         String time_range;
         switch(timeSpan.getSelectedItem().toString()) {
             case "No Limit":
@@ -69,12 +87,44 @@ public class HistoryActivity extends AppCompatActivity {
             default:
                 time_range = "short_term";
         }
-        songService.getFavoriteTracks(() -> {
-            favoriteTracks = songService.getSongs();
-            for(Song s : favoriteTracks) {
-                Log.d("SONG", s.getName());
+        artistService.findFavoriteArtists(() -> {
+            favoriteArtists = artistService.getArtists();
+            for(Artist a : favoriteArtists) {
+                Log.d("Artist", a.getName());
             }
+            newIntent.putExtra("artistService",favoriteArtists);
+            songService.findFavoriteTracks(() -> {
+                favoriteTracks = songService.getSongs();
+                for(Song s : favoriteTracks) {
+                    Log.d("SONG", s.getId());
+                }
+                newIntent.putExtra("songService",favoriteTracks);
+                startActivity(newIntent);
+
+            }, time_range, songCount.getValue());
 
         }, time_range, songCount.getValue());
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume() called");
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause() called");
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop() called");
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy() called");
     }
 }

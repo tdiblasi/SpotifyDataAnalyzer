@@ -1,16 +1,18 @@
 //  Code from https://towardsdatascience.com/using-the-spotify-api-with-your-android-application-the-essentials-1a3c1bc36b9e
-package com.example.spotifyanalyzer;
+package com.example.spotifyanalyzer.song;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Song {
+public class Song implements Serializable {
     private String id;
     private String name;
     private String artist;
     private String albumName;
     private int duration_ms;
+    private String albumCoverUrl;
 
     public Song(String id, String name, Integer duration_ms) {
         this.name = name;
@@ -67,4 +69,8 @@ public class Song {
     public void setDuration(int duration) {
         this.duration_ms = duration_ms;
     }
+
+    public String getAlbumCover() { return this.albumCoverUrl;}
+
+    public void setAlbumCoverUrl(String url) { this.albumCoverUrl = url;}
 }

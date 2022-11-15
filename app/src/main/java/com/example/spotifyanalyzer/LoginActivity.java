@@ -1,6 +1,7 @@
 //  Code from https://towardsdatascience.com/using-the-spotify-api-with-your-android-application-the-essentials-1a3c1bc36b9e
 package com.example.spotifyanalyzer;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,10 +13,20 @@ import android.widget.Button;
 
 import com.android.volley.*;
 import com.android.volley.toolbox.Volley;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.example.spotifyanalyzer.spotifyuser.SpotifyUser;
+import com.example.spotifyanalyzer.spotifyuser.UserService;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.spotify.sdk.android.auth.*;
 
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -23,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String CLIENT_ID = "8ab9226475db4ffca0159c755076590f";
     private static final String REDIRECT_URI = "com.example.spotifytestv4://callback";
     private static final int REQUEST_CODE = 1337;
-    private static final String SCOPES = "user-read-recently-played,user-library-modify,user-read-email,user-read-private,user-top-read";
+    private static final String SCOPES = "user-read-recently-played,user-library-read,user-library-modify,user-read-email,user-read-private,user-top-read";
 
     private SharedPreferences.Editor editor;
     private SharedPreferences msharedPreferences;
@@ -41,6 +52,43 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("STARTING", "GOT USER INFORMATION");
             // We use commit instead of apply because we need the information stored immediately
             editor.commit();
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            // Create a new user with a first and last name
+            Map<String, Object> thisUser = new HashMap<>();
+            thisUser.put("id", user.id);
+            thisUser.put("name", user.display_name);
+            thisUser.put("email", user.email);
+            thisUser.put("songs", null);
+            thisUser.put("artists", null);
+            thisUser.put("genres", null);
+            thisUser.put("recommendations", null);
+
+
+            db.collection("Users")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                boolean found = false;
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    if(document.getData().get("id").equals(user.id)) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if(found == false) {
+                                    uploadUser(user, thisUser, db);
+                                }
+                            } else {
+                                Log.w(TAG, "Error getting documents.", task.getException());
+                            }
+                        }
+                    });
+
+
             startMainActivity();
         });
     }
@@ -48,6 +96,23 @@ public class LoginActivity extends AppCompatActivity {
     private void startMainActivity() {
         Intent newintent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(newintent);
+    }
+
+    private void uploadUser(SpotifyUser user, Map<String, Object> userData, FirebaseFirestore db) {
+                    db.collection("Users").document(user.id)
+                    .set(userData)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully written!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error adding document", e);
+                        }
+                    });
     }
 
     private void authenticateSpotify() {

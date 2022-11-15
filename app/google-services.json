@@ -1,8 +1,9 @@
 {
   "project_info": {
     "project_number": "898466771448",
+    "firebase_url": "https://cse5236project-ee0de-default-rtdb.firebaseio.com",
     "project_id": "cse5236project-ee0de",
-    "storage_bucket": "https://cse5236project-ee0de-default-rtdb.firebaseio.com/"
+    "storage_bucket": "cse5236project-ee0de.appspot.com"
   },
   "client": [
     {
