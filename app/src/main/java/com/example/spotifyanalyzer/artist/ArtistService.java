@@ -14,12 +14,16 @@ import com.android.volley.toolbox.Volley;
 import com.example.spotifyanalyzer.UserListenData;
 import com.example.spotifyanalyzer.VolleyCallBack;
 import com.example.spotifyanalyzer.song.Song;
+import com.google.android.gms.cast.Cast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -28,7 +32,9 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.android.gms.tasks.Task;
@@ -79,7 +85,6 @@ public class ArtistService implements Serializable {
                             e.printStackTrace();
                         }
                     }
-                    uploadFavoriteArtists(artists);
                     callBack.onSuccess();
                 }, error -> {
                     Log.v("Song ERROR", "Error retrieving song list");
@@ -89,7 +94,6 @@ public class ArtistService implements Serializable {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
-                Log.d("TOKEN", token);
                 String auth = "Bearer " + token;
                 headers.put("Authorization", auth);
                 return headers;
@@ -111,24 +115,32 @@ public class ArtistService implements Serializable {
         return artists;
     }
 
+
+
     public Task<Void> uploadFavoriteArtists(ArrayList<Artist> artists) {
+        List<String> artistIds = new ArrayList<String>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference user = db.collection("Users").document(sharedPreferences.getString("userid",""));
-        user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document != null) {
-                        Log.i(TAG,"GOT DOC");
-                    } else {
-                        Log.d("LOGGER", "No such document");
+        user.get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            user.update("artists", null)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            for(Artist artist : artists) {
+                                                user.update("artists", FieldValue.arrayUnion(artist.getId()));
+
+                                            }
+                                        }
+                                    });
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
                     }
-                } else {
-                    Log.d("LOGGER", "get failed with ", task.getException());
-                }
-            }
-        });
+                });
         return null;
     }
 

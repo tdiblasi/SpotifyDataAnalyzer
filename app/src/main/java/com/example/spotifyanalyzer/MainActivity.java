@@ -188,15 +188,9 @@ public class MainActivity extends AppCompatActivity {
         }
         artistService.findFavoriteArtists(() -> {
             ArrayList<Artist> favoriteArtists = artistService.getArtists();
-            for(Artist a : favoriteArtists) {
-                Log.d("Artist", a.getName());
-            }
             newIntent.putExtra("artistService",favoriteArtists);
             songService.findFavoriteTracks(() -> {
                 ArrayList<Song> favoriteTracks = songService.getSongs();
-                for(Song s : favoriteTracks) {
-                    Log.d("SONG", s.getId());
-                }
                 newIntent.putExtra("songService",favoriteTracks);
                 startActivity(newIntent);
 

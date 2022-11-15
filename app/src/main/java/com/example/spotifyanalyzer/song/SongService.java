@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -12,6 +14,13 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.spotifyanalyzer.UserListenData;
 import com.example.spotifyanalyzer.VolleyCallBack;
+import com.example.spotifyanalyzer.artist.Artist;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -21,16 +30,20 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+
 public class SongService implements Serializable {
     private ArrayList<Song> songs = new ArrayList<>();
     private SharedPreferences sharedPreferences;
     private RequestQueue queue;
+    private String favoriteSongIds;
+    private static final String TAG = "SongService";
 
     //private DatabaseReference databaseReference;
 
@@ -52,6 +65,10 @@ public class SongService implements Serializable {
 
     public ArrayList<Song> getSongs() {
         return songs;
+    }
+
+    public String getFavoriteSongIds() {
+        return favoriteSongIds;
     }
 
     public ArrayList<Song> getRecentlyPlayedTracks(final VolleyCallBack callBack) {
@@ -91,7 +108,6 @@ public class SongService implements Serializable {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
-                Log.d("TOKEN", token);
                 String auth = "Bearer " + token;
                 headers.put("Authorization", auth);
                 return headers;
@@ -139,7 +155,6 @@ public class SongService implements Serializable {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
-                Log.d("TOKEN", token);
                 String auth = "Bearer " + token;
                 headers.put("Authorization", auth);
                 return headers;
@@ -150,18 +165,18 @@ public class SongService implements Serializable {
         return songs;
     }
 
-    public ArrayList<Song> getRecommendations(final VolleyCallBack callBack, String[] seedSongs) {
+    public ArrayList<Song> getRecommendations(final VolleyCallBack callBack, String seedSongs) {
         String endpoint = "https://api.spotify.com/v1/recommendations";
-        endpoint = endpoint + "?seed_tracks=";
-        boolean first = true;
-        for(String song : seedSongs) {
-            if(!first) {
-                endpoint = endpoint + ",";
-            } else {
-                first = false;
-            }
-            endpoint = endpoint + song;
-        }
+        endpoint = endpoint + "?seed_tracks=" + seedSongs;
+//        boolean first = true;
+//        for(String song : seedSongs) {
+//            if(!first) {
+//                endpoint = endpoint + ",";
+//            } else {
+//                first = false;
+//            }
+//            endpoint = endpoint + song;
+//        }
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, endpoint, null, response -> {
                     Gson gson = new Gson();
@@ -197,7 +212,6 @@ public class SongService implements Serializable {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
-                Log.d("TOKEN", token);
                 String auth = "Bearer " + token;
                 headers.put("Authorization", auth);
                 return headers;
@@ -243,5 +257,43 @@ public class SongService implements Serializable {
         }
         return ids;
     }
+
+    public Task<Void> uploadFavoriteSongs(ArrayList<Song> songs) {
+        List<String> songIds = new ArrayList<String>();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference user = db.collection("Users").document(sharedPreferences.getString("userid",""));
+        user.get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            user.update("songs", null)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            ArrayList<String> existingIds = (ArrayList<String>) (task.getResult().get("songs"));
+                                            for(Song s : songs) {
+                                                user.update("songs", FieldValue.arrayUnion(s.getId()));
+
+                                            }
+                                        }
+                                    });
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+        return null;
+    }
+
+
+
+    public Task<DocumentSnapshot> get5FavoriteSongs() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference user = db.collection("Users").document(sharedPreferences.getString("userid",""));
+        return user.get();
+    }
+
+
 
 }
