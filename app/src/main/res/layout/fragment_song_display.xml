@@ -23,13 +23,14 @@
             android:layout_weight="1"
             android:weightSum="1"
             >
+
             <ImageView
                 android:id="@+id/albumCover"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_weight="1"
-                android:src="@android:drawable/ic_dialog_alert"
+                android:src="@drawable/blankalbum"
                 android:visibility="visible" />
         </LinearLayout>
 

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -12,6 +14,12 @@ import com.android.volley.toolbox.Volley;
 import com.example.spotifyanalyzer.UserListenData;
 import com.example.spotifyanalyzer.VolleyCallBack;
 import com.example.spotifyanalyzer.song.Song;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -28,6 +36,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class ArtistService implements Serializable {
+    private static final String TAG = "ArtistService";
     private ArrayList<Artist> artists = new ArrayList<>();
     private SharedPreferences sharedPreferences;
     private RequestQueue queue;
@@ -42,7 +51,7 @@ public class ArtistService implements Serializable {
         return artists;
     }
 
-    public ArrayList<Artist> getFavoriteArtists(final VolleyCallBack callBack, String timespan, int songCount) {
+    public ArrayList<Artist> findFavoriteArtists(final VolleyCallBack callBack, String timespan, int songCount) {
         String endpoint = "https://api.spotify.com/v1/me/top/artists";
         endpoint = endpoint + "?limit=" + songCount + "&time_range=" + timespan;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -70,6 +79,7 @@ public class ArtistService implements Serializable {
                             e.printStackTrace();
                         }
                     }
+                    uploadFavoriteArtists(artists);
                     callBack.onSuccess();
                 }, error -> {
                     Log.v("Song ERROR", "Error retrieving song list");
@@ -99,6 +109,27 @@ public class ArtistService implements Serializable {
         };
         queue.add(jsonObjectRequest);
         return artists;
+    }
+
+    public Task<Void> uploadFavoriteArtists(ArrayList<Artist> artists) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference user = db.collection("Users").document(sharedPreferences.getString("userid",""));
+        user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        Log.i(TAG,"GOT DOC");
+                    } else {
+                        Log.d("LOGGER", "No such document");
+                    }
+                } else {
+                    Log.d("LOGGER", "get failed with ", task.getException());
+                }
+            }
+        });
+        return null;
     }
 
 }

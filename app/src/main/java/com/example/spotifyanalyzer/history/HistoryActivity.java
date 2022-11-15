@@ -87,13 +87,13 @@ public class HistoryActivity extends AppCompatActivity {
             default:
                 time_range = "short_term";
         }
-        artistService.getFavoriteArtists(() -> {
+        artistService.findFavoriteArtists(() -> {
             favoriteArtists = artistService.getArtists();
             for(Artist a : favoriteArtists) {
                 Log.d("Artist", a.getName());
             }
             newIntent.putExtra("artistService",favoriteArtists);
-            songService.getFavoriteTracks(() -> {
+            songService.findFavoriteTracks(() -> {
                 favoriteTracks = songService.getSongs();
                 for(Song s : favoriteTracks) {
                     Log.d("SONG", s.getId());

@@ -101,7 +101,7 @@ public class SongService implements Serializable {
         return songs;
     }
 
-    public ArrayList<Song> getFavoriteTracks(final VolleyCallBack callBack, String timespan, int songCount) {
+    public ArrayList<Song> findFavoriteTracks(final VolleyCallBack callBack, String timespan, int songCount) {
         String endpoint = "https://api.spotify.com/v1/me/top/tracks";
         endpoint = endpoint + "?limit=" + songCount + "&time_range=" + timespan;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest

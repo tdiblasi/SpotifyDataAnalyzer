@@ -1,6 +1,7 @@
 //  Some code from https://towardsdatascience.com/using-the-spotify-api-with-your-android-application-the-essentials-1a3c1bc36b9e
 package com.example.spotifyanalyzer;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -22,9 +23,19 @@ import com.example.spotifyanalyzer.recommendations.RecommendationsQueueActivity;
 import com.example.spotifyanalyzer.settings.SettingsActivity;
 import com.example.spotifyanalyzer.song.Song;
 import com.example.spotifyanalyzer.song.SongService;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -86,6 +97,46 @@ public class MainActivity extends AppCompatActivity {
         historyBtn.setOnClickListener(historyListener);
         showHistoryButton.setOnClickListener(showHistoryListener);
         recommendationsBtn.setOnClickListener(recommendationsListener);
+
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//
+//
+//        // Create a new user with a first and last name
+//        Map<String, Object> user = new HashMap<>();
+//        user.put("first", "Tom");
+//        user.put("last", "D");
+//        user.put("born", 2000);
+//
+//// Add a new document with a generated ID
+//        db.collection("Users")
+//                .add(user)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(TAG, "Error adding document", e);
+//                    }
+//                });
+//
+//        db.collection("Users")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Log.d(TAG, document.getId() + " => " + document.getData());
+//                            }
+//                        } else {
+//                            Log.w(TAG, "Error getting documents.", task.getException());
+//                        }
+//                    }
+//                });
     }
 
 //    private View.OnClickListener addListener = v -> {
@@ -135,13 +186,13 @@ public class MainActivity extends AppCompatActivity {
             default:
                 time_range = "short_term";
         }
-        artistService.getFavoriteArtists(() -> {
+        artistService.findFavoriteArtists(() -> {
             ArrayList<Artist> favoriteArtists = artistService.getArtists();
             for(Artist a : favoriteArtists) {
                 Log.d("Artist", a.getName());
             }
             newIntent.putExtra("artistService",favoriteArtists);
-            songService.getFavoriteTracks(() -> {
+            songService.findFavoriteTracks(() -> {
                 ArrayList<Song> favoriteTracks = songService.getSongs();
                 for(Song s : favoriteTracks) {
                     Log.d("SONG", s.getId());
