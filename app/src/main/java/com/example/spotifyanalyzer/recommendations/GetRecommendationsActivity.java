@@ -1,5 +1,6 @@
 package com.example.spotifyanalyzer.recommendations;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -14,8 +15,13 @@ import com.example.spotifyanalyzer.history.HistoryActivity;
 import com.example.spotifyanalyzer.history.ViewHistoryActivity;
 import com.example.spotifyanalyzer.song.Song;
 import com.example.spotifyanalyzer.song.SongService;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class GetRecommendationsActivity extends AppCompatActivity {
     private final String TAG = "GetRecommsActivity";
@@ -41,21 +47,47 @@ public class GetRecommendationsActivity extends AppCompatActivity {
     }
 
     private View.OnClickListener recommendationsQueryListener = v -> {
-        getRecommendations();
+        try {
+            getRecommendations();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     };
 
-    private void getRecommendations() {
+    private void getRecommendations() throws ExecutionException, InterruptedException {
         Intent newIntent = new Intent(GetRecommendationsActivity.this, RecommendationsQueueActivity.class);
-        songService.getRecommendations(() -> {
-            recommendedTracks = songService.getSongs();
-            for(Song s : recommendedTracks) {
-                Log.d("RECOMMEND", s.getName());
-            }
-            newIntent.putExtra("queue",recommendedTracks);
-            startActivity(newIntent);
+
+        songService.get5FavoriteSongs()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            ArrayList<String> existingIds = (ArrayList<String>) (task.getResult().get("songs"));
+                            String favoriteSongIds = "";
+                            for(int i = 0; i < Math.min(existingIds.size(), 5); i++) {
+                                if(i > 0) {
+                                    favoriteSongIds = favoriteSongIds + ",";
+                                }
+                                favoriteSongIds = favoriteSongIds + existingIds.get(i);
+                            }
+                            songService.getRecommendations(() -> {
+                                recommendedTracks = songService.getSongs();
+                                newIntent.putExtra("queue",recommendedTracks);
+                                startActivity(newIntent);
 
 
-        }, SAMPLE_SONGS);
+                            }, favoriteSongIds);
+
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+
+
+
 
     }
 

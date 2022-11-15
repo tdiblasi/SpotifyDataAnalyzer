@@ -110,10 +110,10 @@ public class RecommendationsQueueActivity extends AppCompatActivity {
             songDisplay.setArguments(songData);
             ft.replace(songFragmentDisplay.getId(), songDisplay);
             ft.commit();
-            Log.d("SHAKE", "Undo");
+            //Log.d("SHAKE", "Undo");
 
         } else {
-            Log.d("SHAKE", "Beginning of queue");
+            //Log.d("SHAKE", "Beginning of queue");
         }
     };
 

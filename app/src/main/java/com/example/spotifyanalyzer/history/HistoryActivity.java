@@ -89,15 +89,11 @@ public class HistoryActivity extends AppCompatActivity {
         }
         artistService.findFavoriteArtists(() -> {
             favoriteArtists = artistService.getArtists();
-            for(Artist a : favoriteArtists) {
-                Log.d("Artist", a.getName());
-            }
             newIntent.putExtra("artistService",favoriteArtists);
+            artistService.uploadFavoriteArtists(favoriteArtists);
             songService.findFavoriteTracks(() -> {
                 favoriteTracks = songService.getSongs();
-                for(Song s : favoriteTracks) {
-                    Log.d("SONG", s.getId());
-                }
+                songService.uploadFavoriteSongs(favoriteTracks);
                 newIntent.putExtra("songService",favoriteTracks);
                 startActivity(newIntent);
 
