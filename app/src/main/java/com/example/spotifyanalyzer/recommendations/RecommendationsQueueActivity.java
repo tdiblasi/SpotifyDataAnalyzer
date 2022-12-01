@@ -18,7 +18,9 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.example.spotifyanalyzer.MainActivity;
 import com.example.spotifyanalyzer.SongDisplay;
+import com.example.spotifyanalyzer.history.ViewHistoryActivity;
 import com.example.spotifyanalyzer.song.Song;
 
 import java.lang.reflect.Array;
@@ -103,6 +105,10 @@ public class RecommendationsQueueActivity extends AppCompatActivity {
         if(this.pos > 0) {
             Song song = songs.get(--this.pos);
             this.songDisplay.changeSong(song);
+            if(this.pos == songs.size() - 2) {
+                nextSong.setText("Next Song");
+                nextSong.setEnabled(true);
+            }
         }
     };
 

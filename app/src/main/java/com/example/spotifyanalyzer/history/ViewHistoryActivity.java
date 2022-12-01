@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.spotifyanalyzer.MainActivity;
 import com.example.spotifyanalyzer.R;
 import com.example.spotifyanalyzer.artist.Artist;
 import com.example.spotifyanalyzer.artist.ArtistService;
@@ -25,6 +28,7 @@ import java.util.Map;
 public class ViewHistoryActivity extends AppCompatActivity {
 
     private static final String TAG = "ViewHistoryActivity";
+    private Button home;
     private TextView songsList, artistsList, genresList;
     private ArrayList<Song> songs;
     private ArrayList<Artist> artists;
@@ -45,7 +49,18 @@ public class ViewHistoryActivity extends AppCompatActivity {
         songsList.setText(getSongs());
         artistsList.setText(getArtists());
         genresList.setText(getGenres());
+
+        home = (Button) findViewById(R.id.historyToHome);
+        home.setOnClickListener(homeListener);
     }
+
+    public View.OnClickListener homeListener = v -> {
+        Intent intent=new Intent(ViewHistoryActivity.this, MainActivity.class);
+        Bundle bundle = new Bundle();
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    };
 
     private String getSongs() {
         String list = "";

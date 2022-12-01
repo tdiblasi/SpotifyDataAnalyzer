@@ -24,9 +24,11 @@
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".recommendations.RecommendationsQueueActivity"
+            android:configChanges="orientation|screenSize"
             android:exported="false" />
         <activity
             android:name=".recommendations.GetRecommendationsActivity"
+            android:configChanges="orientation|screenSize"
             android:exported="false" />
         <activity
             android:name=".history.ViewHistoryActivity"
@@ -35,6 +37,7 @@
         <activity
             android:name=".history.HistoryActivity"
             android:exported="false"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_history"
             android:theme="@style/Theme.SpotifyAnalyzer.NoActionBar" />
         <activity

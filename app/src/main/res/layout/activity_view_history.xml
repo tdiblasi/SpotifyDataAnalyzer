@@ -100,5 +100,27 @@
             android:layout_gravity="center"
             android:text="" />
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linearLayoutHistoryToHome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:padding="6dp"
+        android:weightSum="2"
+
+        android:layout_marginTop="20dp">
+
+
+        <Button
+            android:id="@+id/historyToHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Return Home"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
 
 </LinearLayout>

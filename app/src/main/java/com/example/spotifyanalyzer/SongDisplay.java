@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.spotifyanalyzer.recommendations.RecommendationsQueueActivity;
 import com.example.spotifyanalyzer.song.Song;
 import com.example.spotifyanalyzer.song.SongService;
 
@@ -36,7 +37,7 @@ public class SongDisplay extends Fragment {
     private ImageView albumCover;
     private Song currentSong  = null;
     private SongService songService;
-    private Button addButton, listenButton;
+    private Button addButton, listenButton, home;
 
     public SongDisplay() {
         // Required empty public constructor
@@ -91,6 +92,7 @@ public class SongDisplay extends Fragment {
         albumCover = (ImageView) view.findViewById(R.id.albumCover);
         addButton = (Button) view.findViewById(R.id.recomAddBtn);
         listenButton = (Button) view.findViewById(R.id.ListenBtn);
+        home = (Button) view.findViewById(R.id.recommendationsToHome);
         titleView = (TextView) view.findViewById(R.id.recomSongTitle);
 
 
@@ -98,6 +100,7 @@ public class SongDisplay extends Fragment {
 
         listenButton.setOnClickListener(songListener);
         addButton.setOnClickListener(addListener);
+        home.setOnClickListener(homeListener);
     }
 
     public View.OnClickListener songListener = v -> {
@@ -112,6 +115,13 @@ public class SongDisplay extends Fragment {
 
     private View.OnClickListener addListener = v -> {
         songService.addSongToLibrary(this.currentSong);
+    };
+
+    public View.OnClickListener homeListener = v -> {
+        Intent intent=new Intent(getActivity().getApplicationContext(), MainActivity.class);
+        Bundle bundle = new Bundle();
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     };
 
     public void changeSong(Song song) {
