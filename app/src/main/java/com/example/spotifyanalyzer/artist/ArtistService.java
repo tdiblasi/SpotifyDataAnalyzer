@@ -3,6 +3,7 @@ package com.example.spotifyanalyzer.artist;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -46,8 +47,10 @@ public class ArtistService implements Serializable {
     private ArrayList<Artist> artists = new ArrayList<>();
     private SharedPreferences sharedPreferences;
     private RequestQueue queue;
+    private Context context;
 
-    public ArtistService(Context context) {
+    public ArtistService(Context c) {
+        context = c;
         sharedPreferences = context.getSharedPreferences("SPOTIFY", 0);
         queue = Volley.newRequestQueue(context);
 
@@ -88,7 +91,10 @@ public class ArtistService implements Serializable {
                     callBack.onSuccess();
                 }, error -> {
                     Log.v("Song ERROR", "Error retrieving song list");
-
+                    Toast errorToast = Toast.makeText(context,
+                            "Failed to retrieve favorite artists",
+                            Toast.LENGTH_SHORT);
+                    errorToast.show();
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {

@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 //        Button newBtn = findViewById(R.id.newList);
 //        Button loadBtn = findViewById(R.id.loadLists);
         recommendationsBtn = (Button) findViewById(R.id.recommendations);
-        settingsButton = (Button) findViewById(R.id.settings);
+        settingsButton = (Button) findViewById(R.id.settingsButton);
 //
 //
 //

@@ -31,10 +31,11 @@ public class RecommendationsQueueActivity extends AppCompatActivity {
     private static final String TAG = "RecommsQueueActivity";
     private ArrayList<Song> songs;
     private Button nextSong;
-    private int pos = -1;
+    private int pos = 0;
     private boolean slowedDown = true;
 
     private FrameLayout songFragmentDisplay;
+    private SongDisplay songDisplay;
     private SensorManager sensorMgr;
     private float totalAccel, currentAccel, lastAccel;
     private static final float SHAKE_THRESHOLD = 30;
@@ -60,30 +61,35 @@ public class RecommendationsQueueActivity extends AppCompatActivity {
 
         nextSong = (Button) findViewById(R.id.nextSong);
         nextSong.setOnClickListener(nextSongListener);
-        this.showNextSong();
+        songFragmentDisplay = (FrameLayout) findViewById(R.id.recommendationSongFragmentFrame);
+        this.initSongDisplay();
     }
 
     public View.OnClickListener nextSongListener = v -> {
         this.showNextSong();
     };
 
+    public void initSongDisplay() {
+        Song song = songs.get(0);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        this.songDisplay = new SongDisplay();
+        Bundle songData = new Bundle();
+        songData.putInt("duration", song.getDuration());
+        songData.putString("artist", song.getArtist());
+        songData.putString("albumName", song.getAlbumName());
+        songData.putString("albumCoverUrl", song.getAlbumCover());
+        songData.putString("id", song.getId());
+        songData.putSerializable("songObj", song);
+
+        songDisplay.setArguments(songData);
+        ft.replace(songFragmentDisplay.getId(), songDisplay);
+        ft.commit();
+    }
+
     public void showNextSong() {
-        songFragmentDisplay = (FrameLayout) findViewById(R.id.recommendationSongFragmentFrame);
         if(this.pos < songs.size() - 1) {
             Song song = songs.get(++this.pos);
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            SongDisplay songDisplay = new SongDisplay();
-            Bundle songData = new Bundle();
-            songData.putInt("duration", song.getDuration());
-            songData.putString("artist", song.getArtist());
-            songData.putString("albumName", song.getAlbumName());
-            songData.putString("albumCoverUrl", song.getAlbumCover());
-            songData.putString("id", song.getId());
-            songData.putSerializable("songObj", song);
-
-            songDisplay.setArguments(songData);
-            ft.replace(songFragmentDisplay.getId(), songDisplay);
-            ft.commit();
+            this.songDisplay.changeSong(song);
             if(this.pos >= songs.size() - 1) {
                 nextSong.setText("End of Queue");
                 nextSong.setEnabled(false);
@@ -94,26 +100,9 @@ public class RecommendationsQueueActivity extends AppCompatActivity {
     };
 
     public void showLastSong() throws InterruptedException {
-        songFragmentDisplay = (FrameLayout) findViewById(R.id.recommendationSongFragmentFrame);
         if(this.pos > 0) {
             Song song = songs.get(--this.pos);
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            SongDisplay songDisplay = new SongDisplay();
-            Bundle songData = new Bundle();
-            songData.putInt("duration", song.getDuration());
-            songData.putString("artist", song.getArtist());
-            songData.putString("albumName", song.getAlbumName());
-            songData.putString("albumCoverUrl", song.getAlbumCover());
-            songData.putString("id", song.getId());
-            songData.putSerializable("songObj", song);
-
-            songDisplay.setArguments(songData);
-            ft.replace(songFragmentDisplay.getId(), songDisplay);
-            ft.commit();
-            //Log.d("SHAKE", "Undo");
-
-        } else {
-            //Log.d("SHAKE", "Beginning of queue");
+            this.songDisplay.changeSong(song);
         }
     };
 

@@ -30,11 +30,11 @@ import java.io.IOException;
 public class SongDisplay extends Fragment {
     private static final String GET_TRACK_PREFIX = "https://open.spotify.com/track/";
     private static final String TAG = "Fragments: SongDisplay";
-    private int duration;
-    private String songName, artist, albumName, albumCoverUrl, id;
+//    private int duration;
+//    private String songName, artist, albumName, albumCoverUrl, id;
     private TextView durationColumn, artistColumn, albumColumn, titleView;
     private ImageView albumCover;
-    private Song currentSong;
+    private Song currentSong  = null;
     private SongService songService;
     private Button addButton, listenButton;
 
@@ -63,9 +63,9 @@ public class SongDisplay extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate() called");
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            duration = getArguments().getInt("duration");
-        }
+//        if (getArguments() != null) {
+//            duration = getArguments().getInt("duration");
+//        }
     }
 
     @Override
@@ -85,12 +85,6 @@ public class SongDisplay extends Fragment {
         Log.d(TAG, "onViewCreated() called");
         super.onViewCreated(view, savedInstanceState);
 
-        songName = currentSong.getName();
-        duration = currentSong.getDuration()/1000;
-        albumCoverUrl = currentSong.getAlbumCover();
-        artist = currentSong.getArtist();
-        albumName = currentSong.getAlbumName();
-
         durationColumn = (TextView) view.findViewById(R.id.duration);
         artistColumn = (TextView) view.findViewById(R.id.artist);
         albumColumn = (TextView) view.findViewById(R.id.albumName);
@@ -100,14 +94,7 @@ public class SongDisplay extends Fragment {
         titleView = (TextView) view.findViewById(R.id.recomSongTitle);
 
 
-        Glide.with(view)
-                .load(albumCoverUrl)
-                .override(840, 840)
-                .into(albumCover);
-        titleView.setText(songName);
-        durationColumn.setText((duration/60) + ":" + String.format("%02d",duration % 60));
-        artistColumn.setText(artist);
-        albumColumn.setText(albumName);
+        changeSong(currentSong);
 
         listenButton.setOnClickListener(songListener);
         addButton.setOnClickListener(addListener);
@@ -126,4 +113,17 @@ public class SongDisplay extends Fragment {
     private View.OnClickListener addListener = v -> {
         songService.addSongToLibrary(this.currentSong);
     };
+
+    public void changeSong(Song song) {
+        currentSong = song;
+        Glide.with(this)
+                .load(currentSong.getAlbumCover())
+                .override(840, 840)
+                .into(albumCover);
+        titleView.setText(currentSong.getName());
+        int duration = currentSong.getDuration()/1000;
+        durationColumn.setText((duration/60) + ":" + String.format("%02d",duration % 60));
+        artistColumn.setText(currentSong.getArtist());
+        albumColumn.setText(currentSong.getAlbumName());
+    }
 }

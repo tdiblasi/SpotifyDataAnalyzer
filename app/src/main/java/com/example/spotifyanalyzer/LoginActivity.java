@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.*;
 import com.android.volley.toolbox.Volley;
@@ -66,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
             thisUser.put("recommendations", null);
 
 
+
             db.collection("Users")
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -87,6 +89,9 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }
                     });
+
+            db.collection("Users")
+                    .get();
 
 
             startMainActivity();
@@ -143,6 +148,11 @@ public class LoginActivity extends AppCompatActivity {
                 // Auth flow returned an error
                 case ERROR:
                     // Handle error response
+                    Log.d(TAG, "ERROR RETRIEVING AUTH TOKEN");
+                    Toast errorToast = Toast.makeText(getApplicationContext(),
+                            "Failed to retrieve Spotify authentication token",
+                            Toast.LENGTH_SHORT);
+                    errorToast.show();
                     break;
 
                 // Most likely auth flow was cancelled

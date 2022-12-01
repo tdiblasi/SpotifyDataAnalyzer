@@ -4,6 +4,7 @@ package com.example.spotifyanalyzer.song;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -43,6 +44,7 @@ public class SongService implements Serializable {
     private SharedPreferences sharedPreferences;
     private RequestQueue queue;
     private String favoriteSongIds;
+    private Context context;
     private static final String TAG = "SongService";
 
     //private DatabaseReference databaseReference;
@@ -55,7 +57,8 @@ public class SongService implements Serializable {
 //        return this.databaseReference.child(key).updateChildren(hashMap);
 //    }
 
-    public SongService(Context context) {
+    public SongService(Context c) {
+        context = c;
         sharedPreferences = context.getSharedPreferences("SPOTIFY", 0);
         queue = Volley.newRequestQueue(context);
         FirebaseDatabase db = FirebaseDatabase.getInstance();
@@ -102,6 +105,10 @@ public class SongService implements Serializable {
                     callBack.onSuccess();
                 }, error -> {
                     Log.v("Song ERROR", "Error retrieving song list");
+                    Toast errorToast = Toast.makeText(context,
+                            "Failed to retrieve recently played songs",
+                            Toast.LENGTH_SHORT);
+                    errorToast.show();
 
                 }) {
             @Override
@@ -149,7 +156,10 @@ public class SongService implements Serializable {
                     callBack.onSuccess();
                 }, error -> {
                     Log.v("Song ERROR", "Error retrieving song list");
-
+                    Toast errorToast = Toast.makeText(context,
+                            "Failed to retrieve favorite songs",
+                            Toast.LENGTH_SHORT);
+                    errorToast.show();
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -206,7 +216,10 @@ public class SongService implements Serializable {
                     callBack.onSuccess();
                 }, error -> {
                     Log.v("Song ERROR", "Error retrieving song list");
-                    Log.v("ERROR", error.toString());
+                    Toast errorToast = Toast.makeText(context,
+                            "Failed to retrieve recommendations",
+                            Toast.LENGTH_SHORT);
+                    errorToast.show();
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -280,6 +293,11 @@ public class SongService implements Serializable {
                                     });
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
+                            Toast errorToast = Toast.makeText(context,
+                                    "Error uploading favorite songs to database",
+                                    Toast.LENGTH_SHORT);
+                            errorToast.show();
+
                         }
                     }
                 });
